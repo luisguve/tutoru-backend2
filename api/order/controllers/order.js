@@ -29,7 +29,18 @@ module.exports = {
             entities = await strapi.services.order.find({...ctx.query, user: user.id});
         }
 
-        return entities.map(entity => sanitizeEntity(entity, { model: strapi.models.order }));
+        return entities.map(entity => {
+            const order = sanitizeEntity(entity, { model: strapi.models.order });
+            order.ejercicios.forEach(ejercicio => {
+                if (ejercicio.solucion) {
+                  delete ejercicio.solucion;
+                }
+                if (ejercicio.solucion_pdf) {
+                  delete ejercicio.solucion_pdf;
+                }
+            })
+            return order;
+        });
     },
     /**
      * Retrieve an order by id, only if it belongs to the user
@@ -39,52 +50,72 @@ module.exports = {
         const { user } = ctx.state
 
         const entity = await strapi.services.order.findOne({ id, user: user.id });
-        return sanitizeEntity(entity, { model: strapi.models.order });
+        const order = sanitizeEntity(entity, { model: strapi.models.order });
+        order.ejercicios.forEach(ejercicio => {
+            if (ejercicio.solucion) {
+              delete ejercicio.solucion;
+            }
+            if (ejercicio.solucion_pdf) {
+              delete ejercicio.solucion_pdf;
+            }
+        })
+        return order;
     },
 
 
     async create(ctx) {
         const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000' //So we can redirect back
     
-        const { product } = ctx.request.body
-        if(!product){
-            return res.status(400).send({error: "Please add a product to body"})
+        const { ejercicios } = ctx.request.body
+        if(!ejercicios || !ejercicios.length){
+            return ctx.throw(400, "Especificar un ejercicio")
         }
 
+        const ejerciciosIds = [];
+
         //Retrieve the real product here
-        const realProduct = await strapi.services.product.findOne({ id: product.id })
-        if(!realProduct){
-            return res.status(404).send({error: "This product doesn't exist"})
+        const realEjercicios = []
+        for (var i = 0; i < ejercicios.length; i++) {
+            const e = ejercicios[i]
+            const realEjercicio = await strapi.services.ejercicio.findOne({id: e.id})
+            if (!realEjercicio) {
+                return ctx.throw(404, `Ejercicio ${e.id} no encontrado`)
+            }
+            realEjercicios.push(realEjercicio)
+            ejerciciosIds.push(realEjercicio.id)
         }
 
         const {user} = ctx.state //From Magic Plugin
 
+        let total = 0;
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
-            line_items: [
-                {
+            line_items: realEjercicios.map(e => {
+                total += e.precio;
+                return {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: realProduct.name
+                            name: e.titulo
                         },
-                        unit_amount: fromDecimalToInt(realProduct.price),
+                        unit_amount: fromDecimalToInt(e.precio),
                     },
                     quantity: 1,
-                },
-            ],
+                };
+            }),
             customer_email: user.email, //Automatically added by Magic Link
             mode: "payment",
-            success_url: `${BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${BASE_URL}/pago?confirmante={CHECKOUT_SESSION_ID}`,
             cancel_url: BASE_URL,
         })
         
         //TODO Create Temp Order here
         const newOrder = await strapi.services.order.create({
             user: user.id,
-            product: realProduct.id,
-            total: realProduct.price,
-            status: 'unpaid',
+            estado: "no_completada",
+            total,
+            ejercicios: ejerciciosIds,
             checkout_session: session.id
         })
 
@@ -92,23 +123,61 @@ module.exports = {
     },
     async confirm(ctx) {
         const { checkout_session } = ctx.request.body
-        console.log("checkout_session", checkout_session)
         const session = await stripe.checkout.sessions.retrieve(
             checkout_session
         )
-        console.log("verify session", session)
+        const { user: { id } } = ctx.state
+
+        const order = await strapi.services.order.findOne({
+            checkout_session
+        })
+
+        if (!order) {
+            return ctx.throw(404, "Orden de compra no encontrada")
+        }
+        if (order.user.id !== id) {
+            return ctx.throw(403, "Esta orden de compra no pertenece a este usuario")
+        }
 
         if(session.payment_status === "paid"){
-            //Update order
-            const newOrder = await strapi.services.order.update({
+            // Update order
+            const nuevos = await strapi.services.order.update({
                 checkout_session
             },
             {
-                status: 'paid'
+                estado: "completada"
             })
 
-            return newOrder
-    
+            // Enlaza los ejercicios con su solucion al usuario.
+
+            // Obtener los ejercicios que ha adquirido este usuario.
+            const anteriores = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id })
+
+            // Si este usuario no tiene ejercicios, se crea un nuevo registro.
+            if (!anteriores) {
+                await strapi.services["usuarios-ejercicios"].create({
+                    user_id: id,
+                    ejercicios: nuevos.ejercicios.map(e => e.id)
+                })
+            } else {
+                // Si ya tiene ejercicios comprados, se le agrean los nuevos.
+                await strapi.services["usuarios-ejercicios"].update({
+                    user_id: id
+                },
+                {
+                    ejercicios: [
+                        ...anteriores.ejercicios.map(e => e.id),
+                        ...nuevos.ejercicios.map(e => e.id)
+                    ]
+                })
+            }
+
+            const result = sanitizeEntity(nuevos, { model: strapi.models.order })
+            // Elimina información privada
+            delete result.ejercicios
+            delete result.user
+
+            return result
         } else {
             ctx.throw(400, "It seems like the order wasn't verified, please contact support")
         }

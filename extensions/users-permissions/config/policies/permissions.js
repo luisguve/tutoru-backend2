@@ -31,6 +31,7 @@ module.exports = async (ctx, next) => {
       /** END With Magic Changes */
     }
 
+
     if (!ctx.state.user) {
       return handleErrors(ctx, 'User Not Found', 'unauthorized');
     }

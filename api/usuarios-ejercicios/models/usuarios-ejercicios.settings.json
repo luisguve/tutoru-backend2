@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "usuarios_ejercicios",
+  "info": {
+    "name": "usuarios_ejercicios",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "user_id": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "ejercicios": {
+      "collection": "ejercicio"
+    }
+  }
+}

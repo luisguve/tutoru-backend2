@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/usuarios-ejercicios",
+      "handler": "usuarios-ejercicios.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios-ejercicios/count",
+      "handler": "usuarios-ejercicios.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios-ejercicios/:id",
+      "handler": "usuarios-ejercicios.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios-ejercicios",
+      "handler": "usuarios-ejercicios.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/usuarios-ejercicios/:id",
+      "handler": "usuarios-ejercicios.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/usuarios-ejercicios/:id",
+      "handler": "usuarios-ejercicios.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ejercicios",
+  "info": {
+    "name": "ejercicios",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "titulo": {
+      "type": "string"
+    },
+    "descripcion": {
+      "type": "richtext"
+    },
+    "categoria": {
+      "type": "enumeration",
+      "enum": [
+        "termodinamica",
+        "mecanica_de_fluidos",
+        "fenomenos_de_transporte",
+        "mecanica_vectorial"
+      ]
+    },
+    "dificultad": {
+      "type": "enumeration",
+      "enum": [
+        "facil",
+        "media",
+        "dificil"
+      ]
+    },
+    "archivo": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "precio": {
+      "type": "decimal"
+    },
+    "solucion_pdf": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "solucion": {
+      "type": "richtext"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo"
+    },
+    "descripcion_seo": {
+      "type": "text"
+    },
+    "titulo_seo": {
+      "type": "text"
+    },
+    "descripcion_corta": {
+      "type": "text"
+    }
+  }
+}

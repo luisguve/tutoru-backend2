@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "orders",
   "info": {
-    "name": "order",
+    "name": "ordenes_de_compra",
     "description": ""
   },
   "options": {
@@ -11,11 +11,11 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "status": {
+    "estado": {
       "type": "enumeration",
       "enum": [
-        "paid",
-        "unpaid"
+        "completada",
+        "no_completada"
       ]
     },
     "total": {
@@ -24,14 +24,13 @@
     "checkout_session": {
       "type": "string"
     },
-    "product": {
-      "model": "product",
-      "via": "orders"
-    },
     "user": {
       "plugin": "users-permissions",
       "model": "user",
       "via": "orders"
+    },
+    "ejercicios": {
+      "collection": "ejercicio"
     }
   }
 }
