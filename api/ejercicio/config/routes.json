@@ -18,6 +18,22 @@
     },
     {
       "method": "GET",
+      "path": "/ejercicios/comprados",
+      "handler": "ejercicio.comprados",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ejercicios/comprados-ids",
+      "handler": "ejercicio.compradosIds",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/ejercicios/:id",
       "handler": "ejercicio.findOne",
       "config": {

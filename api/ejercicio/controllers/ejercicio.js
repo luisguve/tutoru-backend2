@@ -41,4 +41,31 @@ module.exports = {
     }
     return ejercicio;
   },
+  // Retorna los ejercicios (sin solución) que ha adquirido el usuario
+  async comprados(ctx) {
+    const { user: { id } } = ctx.state
+
+    const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id })
+    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return null
+
+    return usuario.ejercicios.map(entity => {
+      const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
+      if (ejercicio.solucion) {
+        delete ejercicio.solucion;
+      }
+      if (ejercicio.solucion_pdf) {
+        delete ejercicio.solucion_pdf;
+      }
+      return ejercicio;
+    });
+  },
+  // Retorna los IDs de los ejercicios que ha adquirido el usuario
+  async compradosIds(ctx) {
+    const { user: { id } } = ctx.state
+
+    const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id });
+    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return null
+
+    return usuario.ejercicios.map(e => e.id)
+  },
 };
