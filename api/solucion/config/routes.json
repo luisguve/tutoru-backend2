@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/solucion/:id",
+      "handler": "solucion.findOne",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
