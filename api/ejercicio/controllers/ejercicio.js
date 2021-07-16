@@ -7,8 +7,11 @@ const { sanitizeEntity } = require('strapi-utils');
  * to customize this controller
  */
 
-// Quita las soluciones a los ejercicios
+
 module.exports = {
+  /*
+  * Retorna los ejercicios (sin solucion)
+  */
   async find(ctx) {
     let entities;
     if (ctx.query._q) {
@@ -28,6 +31,9 @@ module.exports = {
       return ejercicio;
     });
   },
+  /*
+  * Retorna el ejercicio (sin solucion)
+  */
   async findOne(ctx) {
     const { id } = ctx.params;
 
