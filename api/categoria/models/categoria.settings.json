@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categorias",
+  "info": {
+    "name": "Categoria",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Titulo_url": {
+      "type": "string"
+    },
+    "Thumbnail": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "ejercicios": {
+      "collection": "ejercicio",
+      "via": "categoria"
+    },
+    "Titulo_normal": {
+      "type": "string"
+    },
+    "hijos": {
+      "collection": "categoria",
+      "via": "padre"
+    },
+    "padre": {
+      "model": "categoria",
+      "via": "hijos"
+    },
+    "Aria_label": {
+      "type": "string"
+    }
+  }
+}

@@ -17,15 +17,6 @@
     "descripcion": {
       "type": "richtext"
     },
-    "categoria": {
-      "type": "enumeration",
-      "enum": [
-        "termodinamica",
-        "mecanica_de_fluidos",
-        "fenomenos_de_transporte",
-        "mecanica_vectorial"
-      ]
-    },
     "dificultad": {
       "type": "enumeration",
       "enum": [
@@ -74,6 +65,10 @@
     },
     "descripcion_corta": {
       "type": "text"
+    },
+    "categoria": {
+      "via": "ejercicios",
+      "model": "categoria"
     }
   }
 }
