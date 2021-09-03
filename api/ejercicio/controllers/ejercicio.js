@@ -13,12 +13,14 @@ module.exports = {
   * Retorna los ejercicios (sin solucion)
   */
   async find(ctx) {
-    let entities;
-    if (ctx.query._q) {
-      entities = await strapi.services.ejercicio.search(ctx.query);
-    } else {
-      entities = await strapi.services.ejercicio.find(ctx.query);
+    const categoria = ctx.query["categoria"];
+    if (!categoria) {
+      return null;
     }
+
+    const entities = await strapi.services.ejercicio.find({
+      "categoria.Titulo_url": categoria
+    });
 
     return entities.map(entity => {
       const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
@@ -36,13 +38,20 @@ module.exports = {
   */
   async findOne(ctx) {
     const { id } = ctx.params;
+    const categoria = ctx.query["categoria"];
+    if (!categoria) {
+      return null;
+    }
 
-    const entity = await strapi.services.ejercicio.findOne({ id });
+    const entity = await strapi.services.ejercicio.findOne({
+      slug: id,
+      "categoria.Titulo_url": categoria
+    });
     const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
-    if (ejercicio.solucion) {
+    if (ejercicio && ejercicio.solucion) {
       delete ejercicio.solucion;
     }
-    if (ejercicio.solucion_pdf) {
+    if (ejercicio && ejercicio.solucion_pdf) {
       delete ejercicio.solucion_pdf;
     }
     return ejercicio;
