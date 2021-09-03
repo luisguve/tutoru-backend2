@@ -25,6 +25,14 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/categorias/:slug/resumen",
+      "handler": "categoria.resumen",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "POST",
       "path": "/categorias",
       "handler": "categoria.create",

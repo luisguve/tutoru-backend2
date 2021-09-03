@@ -26,8 +26,8 @@
       "required": false
     },
     "ejercicios": {
-      "collection": "ejercicio",
-      "via": "categoria"
+      "via": "categoria",
+      "collection": "ejercicio"
     },
     "Titulo_normal": {
       "type": "string"
@@ -42,6 +42,11 @@
     },
     "Aria_label": {
       "type": "string"
+    },
+    "muestras": {
+      "via": "categorias_muestra",
+      "collection": "ejercicio",
+      "dominant": true
     }
   }
 }
