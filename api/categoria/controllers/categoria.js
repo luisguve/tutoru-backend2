@@ -95,8 +95,8 @@ module.exports = {
       let categoriaActual = ejercicio.categoria;
       const arbol = [categoriaActual.Titulo_url];
       while (categoriaActual.padre) {
-        categoriaActual = await strapi.services.categoria.find({
-          Titulo_url: categoriaActual.padre.Titulo_url
+        categoriaActual = await strapi.services.categoria.findOne({
+          id: categoriaActual.padre.id || categoriaActual.padre
         });
         arbol.unshift(categoriaActual.Titulo_url);
       }
