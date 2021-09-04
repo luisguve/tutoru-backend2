@@ -9,7 +9,7 @@ const { sanitizeEntity } = require('strapi-utils');
 
 
 module.exports = {
-  /*
+  /**
   * Retorna los ejercicios (sin solucion)
   */
   async find(ctx) {
@@ -22,7 +22,7 @@ module.exports = {
       "categoria.Titulo_url": categoria
     });
 
-    return entities.map(entity => {
+    return await Promise.all(entities.map(async entity => {
       const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
       if (ejercicio.solucion) {
         delete ejercicio.solucion;
@@ -30,10 +30,23 @@ module.exports = {
       if (ejercicio.solucion_pdf) {
         delete ejercicio.solucion_pdf;
       }
+      // Construye el arbol de categorias como un array, comenzando por la
+      // categoria raiz.
+      let categoriaActual = ejercicio.categoria;
+      const arbol = [categoriaActual.Titulo_url];
+      while (categoriaActual.padre) {
+        categoriaActual = await strapi.services.categoria.findOne({
+          id: categoriaActual.padre.id || categoriaActual.padre
+        });
+        arbol.unshift(categoriaActual.Titulo_url);
+      }
+      // Anexa el arbol de categorias al ejercicio
+      ejercicio.arbolCategorias = arbol;
+
       return ejercicio;
-    });
+    }));
   },
-  /*
+  /**
   * Retorna el ejercicio (sin solucion)
   */
   async findOne(ctx) {
@@ -54,9 +67,25 @@ module.exports = {
     if (ejercicio && ejercicio.solucion_pdf) {
       delete ejercicio.solucion_pdf;
     }
+
+    // Construye el arbol de categorias como un array, comenzando por la
+    // categoria raiz.
+    let categoriaActual = ejercicio.categoria;
+    const arbol = [categoriaActual.Titulo_url];
+    while (categoriaActual.padre) {
+      categoriaActual = await strapi.services.categoria.findOne({
+        id: categoriaActual.padre.id || categoriaActual.padre
+      });
+      arbol.unshift(categoriaActual.Titulo_url);
+    }
+    // Anexa el arbol de categorias al ejercicio
+    ejercicio.arbolCategorias = arbol;
+
     return ejercicio;
   },
-  // Retorna los ejercicios (sin solución) que ha adquirido el usuario
+  /**
+  * Retorna los ejercicios (sin solución) que ha adquirido el usuario
+  */
   async comprados(ctx) {
     const { user: { id } } = ctx.state
 
@@ -74,7 +103,9 @@ module.exports = {
       return ejercicio;
     });
   },
-  // Retorna los IDs de los ejercicios que ha adquirido el usuario
+  /**
+  * Retorna los IDs de los ejercicios que ha adquirido el usuario
+  */
   async compradosIds(ctx) {
     const { user: { id } } = ctx.state
 

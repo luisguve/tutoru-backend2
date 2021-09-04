@@ -82,7 +82,7 @@ module.exports = {
     let q = categoria.ejercicios.length;
 
     // Obtiene los ejercicios de muestra
-    const muestras = categoria.muestras.map(e => {
+    const muestras = await Promise.all(categoria.muestras.map(async e => {
       const ejercicio = sanitizeEntity(e, { model: strapi.models.ejercicio });
       if (ejercicio.solucion) {
         delete ejercicio.solucion;
@@ -90,8 +90,20 @@ module.exports = {
       if (ejercicio.solucion_pdf) {
         delete ejercicio.solucion_pdf;
       }
+      // Construye el arbol de categorias como un array, comenzando por la
+      // categoria raiz.
+      let categoriaActual = ejercicio.categoria;
+      const arbol = [categoriaActual.Titulo_url];
+      while (categoriaActual.padre) {
+        categoriaActual = await strapi.services.categoria.find({
+          Titulo_url: categoriaActual.padre.Titulo_url
+        });
+        arbol.unshift(categoriaActual.Titulo_url);
+      }
+      // Anexa el arbol de categorias al ejercicio
+      ejercicio.arbolCategorias = arbol;
       return ejercicio;
-    });
+    }));
     // Cuenta los ejercicios de las subcategorias
     if (categoria.hijos) {
       await eachHijo(categoria.hijos, async (subcategoria) => {
