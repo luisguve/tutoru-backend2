@@ -1,0 +1,27 @@
+{
+  "kind": "singleType",
+  "collectionName": "homes",
+  "info": {
+    "name": "Home",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Titulo_home": {
+      "type": "string"
+    },
+    "Descripcion": {
+      "type": "richtext"
+    },
+    "Titulo_sitio": {
+      "type": "string"
+    },
+    "Subtitulo_sitio": {
+      "type": "string"
+    }
+  }
+}
