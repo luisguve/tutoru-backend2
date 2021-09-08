@@ -123,7 +123,7 @@ module.exports = {
     const { user: { id } } = ctx.state
 
     const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id });
-    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return null
+    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return []
 
     return usuario.ejercicios.map(e => e.id)
   },
