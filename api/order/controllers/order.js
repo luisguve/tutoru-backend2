@@ -81,6 +81,11 @@ module.exports = {
             if (!realEjercicio) {
                 return ctx.throw(404, `Ejercicio ${e.id} no encontrado`)
             }
+            if (!realEjercicio.categoria.Titulo_normal) {
+                // El ejercicio no tiene la categoria completa. Se requiere del titulo.
+                const query = {id: categoria}
+                realEjercicio.categoria = await strapi.services.categoria.findOne(query)
+            }
             realEjercicios.push(realEjercicio)
             ejerciciosIds.push(realEjercicio.id)
         }
@@ -97,7 +102,7 @@ module.exports = {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: e.titulo
+                            name: `${e.categoria.Titulo_normal} - ${e.titulo}`
                         },
                         unit_amount: fromDecimalToInt(e.precio),
                     },
