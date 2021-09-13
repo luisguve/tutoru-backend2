@@ -34,7 +34,6 @@ module.exports = {
         }
         return {
             solucion: ejercicio.solucion,
-            solucion_pdf_url: ejercicio.solucion_pdf.url
         }
     }
 };
