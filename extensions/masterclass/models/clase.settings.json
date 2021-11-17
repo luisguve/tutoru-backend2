@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clases",
+  "info": {
+    "name": "clase",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true,
+    "increments": true,
+    "comment": ""
+  },
+  "attributes": {
+    "video": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "curso": {
+      "via": "clases",
+      "plugin": "masterclass",
+      "model": "course"
+    }
+  }
+}

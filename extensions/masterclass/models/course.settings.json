@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "Cursos",
+  "info": {
+    "name": "Curso",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "titulo": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true
+    },
+    "descripcion": {
+      "type": "text"
+    },
+    "duracion": {
+      "type": "decimal",
+      "private": false
+    },
+    "rating": {
+      "type": "decimal"
+    },
+    "precio": {
+      "type": "decimal"
+    },
+    "comentarios_publicos": {
+      "plugin": "masterclass",
+      "collection": "comentario",
+      "via": "curso"
+    },
+    "preguntas": {
+      "plugin": "masterclass",
+      "collection": "comentario",
+      "via": "curso"
+    },
+    "ventas": {
+      "plugin": "masterclass",
+      "collection": "venta",
+      "via": "cursos"
+    },
+    "estudiantes": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "cursos",
+      "dominant": true
+    },
+    "clases": {
+      "plugin": "masterclass",
+      "collection": "clase",
+      "via": "curso"
+    }
+  }
+}

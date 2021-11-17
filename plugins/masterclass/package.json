@@ -1,0 +1,31 @@
+{
+  "name": "strapi-plugin-masterclass",
+  "version": "0.0.1",
+  "description": "Learning management system (LMS) plugin for Strapi",
+  "strapi": {
+    "name": "Masterclass",
+    "icon": "plug",
+    "description": "Learning management system (LMS) plugin for Strapi"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.10.2",
+    "bootstrap": "^5.1.3"
+  },
+  "author": {
+    "name": "Luis G. Villegas",
+    "email": "luisguveal@gmail.com",
+    "url": "https://github.com/luisguve"
+  },
+  "maintainers": [
+    {
+      "name": "Luis G. Villegas",
+      "email": "luisguveal@gmail.com",
+      "url": "https://github.com/luisguve"
+    }
+  ],
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

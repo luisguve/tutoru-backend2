@@ -1,0 +1,48 @@
+{
+  "collectionName": "Cursos",
+  "info": {
+    "name": "Curso",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "duration": {
+      "configurable": false,
+      "type": "decimal"
+    },
+    "videos": {
+      "type": "integer"
+    },
+    "rating": {
+      "configurable": false,
+      "type": "decimal"
+    },
+    "students": {
+      "configurable": false,
+      "type": "integer"
+    },
+    "price": {
+      "type": "decimal"
+    }
+  }
+}

@@ -62,6 +62,16 @@
     "orders": {
       "via": "user",
       "collection": "order"
+    },
+    "compras_cursos": {
+      "via": "usuario",
+      "plugin": "masterclass",
+      "collection": "venta"
+    },
+    "cursos": {
+      "via": "estudiantes",
+      "plugin": "masterclass",
+      "collection": "course"
     }
   }
 }

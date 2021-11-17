@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comentarios",
+  "info": {
+    "name": "comentario",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "contenido": {
+      "type": "text"
+    },
+    "curso": {
+      "via": "preguntas",
+      "plugin": "masterclass",
+      "model": "course"
+    },
+    "respuestas": {
+      "plugin": "masterclass",
+      "collection": "respuesta",
+      "via": "comentario"
+    }
+  }
+}

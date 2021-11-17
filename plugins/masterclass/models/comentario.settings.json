@@ -1,0 +1,18 @@
+{
+  "collectionName": "comentarios",
+  "info": {
+    "name": "comentario",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "contenido": {
+      "type": "text"
+    }
+  }
+}

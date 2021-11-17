@@ -1,0 +1,18 @@
+{
+  "collectionName": "ventas",
+  "info": {
+    "name": "venta",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "total": {
+      "type": "decimal"
+    }
+  }
+}

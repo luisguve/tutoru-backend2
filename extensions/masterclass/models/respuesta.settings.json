@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "respuestas",
+  "info": {
+    "name": "respuesta",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "contenido": {
+      "type": "text"
+    },
+    "autor": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "comentario": {
+      "via": "respuestas",
+      "plugin": "masterclass",
+      "model": "comentario"
+    }
+  }
+}
