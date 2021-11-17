@@ -1,29 +1,30 @@
 {
   "kind": "collectionType",
-  "collectionName": "comentarios",
+  "collectionName": "clases",
   "info": {
-    "name": "comentario",
+    "name": "clase",
     "description": ""
   },
   "options": {
     "draftAndPublish": false,
-    "increments": true,
     "timestamps": true,
+    "increments": true,
     "comment": ""
   },
   "attributes": {
-    "contenido": {
-      "type": "text"
+    "video": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
     },
     "curso": {
-      "via": "preguntas",
+      "via": "clases",
       "plugin": "masterclass",
       "model": "course"
-    },
-    "respuestas": {
-      "plugin": "masterclass",
-      "collection": "respuesta",
-      "via": "comentario"
     }
   }
 }

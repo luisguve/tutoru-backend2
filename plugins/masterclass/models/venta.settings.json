@@ -1,4 +1,5 @@
 {
+  "kind": "collectionType",
   "collectionName": "ventas",
   "info": {
     "name": "venta",
@@ -13,6 +14,17 @@
   "attributes": {
     "total": {
       "type": "decimal"
+    },
+    "usuario": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "compras_cursos"
+    },
+    "cursos": {
+      "via": "ventas",
+      "plugin": "masterclass",
+      "collection": "course",
+      "dominant": true
     }
   }
 }
