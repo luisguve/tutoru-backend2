@@ -12,10 +12,46 @@
     "comment": ""
   },
   "attributes": {
+    "duracion": {
+      "type": "decimal",
+      "configurable": false,
+      "private": false
+    },
+    "rating": {
+      "configurable": false,
+      "type": "decimal"
+    },
+    "comentarios_publicos": {
+      "configurable": false,
+      "plugin": "masterclass",
+      "collection": "comentario",
+      "via": "curso"
+    },
+    "preguntas": {
+      "configurable": false,
+      "plugin": "masterclass",
+      "collection": "comentario",
+      "via": "curso"
+    },
+    "ventas": {
+      "configurable": false,
+      "plugin": "masterclass",
+      "collection": "venta",
+      "via": "cursos"
+    },
+    "estudiantes": {
+      "configurable": false,
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "cursos",
+      "dominant": true
+    },
     "titulo": {
+      "configurable": false,
       "type": "string"
     },
     "thumbnail": {
+      "configurable": false,
       "model": "file",
       "via": "related",
       "allowedTypes": [
@@ -25,40 +61,16 @@
       "required": true
     },
     "descripcion": {
+      "configurable": false,
       "type": "text"
     },
-    "duracion": {
+    "precio": {
+      "configurable": false,
       "type": "decimal",
       "private": false
     },
-    "rating": {
-      "type": "decimal"
-    },
-    "precio": {
-      "type": "decimal"
-    },
-    "comentarios_publicos": {
-      "plugin": "masterclass",
-      "collection": "comentario",
-      "via": "curso"
-    },
-    "preguntas": {
-      "plugin": "masterclass",
-      "collection": "comentario",
-      "via": "curso"
-    },
-    "ventas": {
-      "plugin": "masterclass",
-      "collection": "venta",
-      "via": "cursos"
-    },
-    "estudiantes": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "cursos",
-      "dominant": true
-    },
     "clases": {
+      "configurable": false,
       "plugin": "masterclass",
       "collection": "clase",
       "via": "curso"
