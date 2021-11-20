@@ -7,8 +7,8 @@
   },
   "options": {
     "draftAndPublish": false,
-    "timestamps": true,
     "increments": true,
+    "timestamps": true,
     "comment": ""
   },
   "attributes": {
@@ -18,7 +18,7 @@
       "allowedTypes": [
         "videos"
       ],
-      "plugin": "upload",
+      "plugin": "upload-ansara-vod",
       "required": false
     },
     "curso": {

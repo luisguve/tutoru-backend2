@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "usuario_cursos",
+  "info": {
+    "name": "usuario_curso",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "clases_completadas": {
+      "type": "json"
+    },
+    "usuario": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "cursos"
+    },
+    "curso": {
+      "plugin": "masterclass",
+      "model": "course",
+      "via": "usuarios"
+    }
+  }
+}
