@@ -39,13 +39,6 @@
       "collection": "venta",
       "via": "cursos"
     },
-    "estudiantes": {
-      "configurable": false,
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "cursos",
-      "dominant": true
-    },
     "titulo": {
       "configurable": false,
       "type": "string"
@@ -70,10 +63,14 @@
       "private": false
     },
     "clases": {
-      "configurable": false,
+      "via": "curso",
       "plugin": "masterclass",
-      "collection": "clase",
-      "via": "curso"
+      "collection": "clase"
+    },
+    "usuarios": {
+      "via": "curso",
+      "plugin": "masterclass",
+      "collection": "usuario-curso"
     }
   }
 }

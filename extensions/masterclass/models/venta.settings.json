@@ -16,9 +16,9 @@
       "type": "decimal"
     },
     "usuario": {
+      "via": "compras_cursos",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "compras_cursos"
+      "model": "user"
     },
     "cursos": {
       "via": "ventas",

@@ -7,8 +7,8 @@
   },
   "options": {
     "draftAndPublish": false,
-    "timestamps": true,
     "increments": true,
+    "timestamps": true,
     "comment": ""
   },
   "attributes": {
@@ -22,9 +22,12 @@
       "required": false
     },
     "curso": {
-      "via": "clases",
       "plugin": "masterclass",
-      "model": "course"
+      "model": "course",
+      "via": "clases"
+    },
+    "duracion": {
+      "type": "biginteger"
     }
   }
 }

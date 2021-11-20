@@ -60,18 +60,18 @@
       "configurable": false
     },
     "orders": {
-      "via": "user",
-      "collection": "order"
+      "collection": "order",
+      "via": "user"
     },
     "compras_cursos": {
-      "via": "usuario",
       "plugin": "masterclass",
-      "collection": "venta"
+      "collection": "venta",
+      "via": "usuario"
     },
     "cursos": {
-      "via": "estudiantes",
+      "via": "usuario",
       "plugin": "masterclass",
-      "collection": "course"
+      "collection": "usuario-curso"
     }
   }
 }
