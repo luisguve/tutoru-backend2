@@ -1,0 +1,74 @@
+{
+  "_from": "strapi-provider-upload-oss",
+  "_id": "strapi-provider-upload-oss@0.1.6",
+  "_inBundle": false,
+  "_integrity": "sha512-v2vJYe8GwbQEHbhZe9Z90G1e/Cx0JOY9gHf6hPbgY/UDqqyKBsaKt4ySukytR7f5JV0VeeD2K3rQqAZrBLmxQg==",
+  "_location": "/strapi-provider-upload-oss",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "strapi-provider-upload-oss",
+    "name": "strapi-provider-upload-oss",
+    "escapedName": "strapi-provider-upload-oss",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/strapi-provider-upload-oss/-/strapi-provider-upload-oss-0.1.6.tgz",
+  "_shasum": "2b4d68e3d276de5209123a8048cad4e918019467",
+  "_spec": "strapi-provider-upload-oss",
+  "_where": "C:\\portfolio\\Next-Ecommerce-Backend",
+  "author": {
+    "name": "hezzze",
+    "email": "hezzze@gmail.com",
+    "url": "http://heze.io"
+  },
+  "bugs": {
+    "url": "https://github.com/hezzze/strapi-provider-upload-oss/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@alicloud/pop-core": "^1.7.1",
+    "ali-oss": "^6.0.1",
+    "co": "^4.6.0"
+  },
+  "deprecated": false,
+  "description": "Strapi upload provider. Upload images to Aliyun OSS and videos to Apsara VOD",
+  "directories": {
+    "lib": "./lib"
+  },
+  "engines": {
+    "node": ">= 10.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "http://strapi.io",
+  "keywords": [
+    "upload",
+    "aliyun",
+    "oss",
+    "strapi"
+  ],
+  "license": "MIT",
+  "main": "./lib",
+  "maintainers": [
+    {
+      "name": "Luis Villegas",
+      "email": "luisguveal@gmail.com",
+      "url": "https://github.com/luisguve"
+    }
+  ],
+  "name": "strapi-provider-upload-oss-apsara-vod",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hezzze/strapi-provider-upload-oss.git"
+  },
+  "strapi": {
+    "isProvider": true
+  },
+  "version": "0.1.6"
+}
