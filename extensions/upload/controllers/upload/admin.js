@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Core = require('@alicloud/pop-core');
 const { contentTypes: contentTypesUtils } = require('strapi-utils');
 const validateSettings = require('../validation/settings');
 const validateUploadBody = require('../validation/upload');
@@ -15,6 +16,14 @@ const ACTIONS = {
   download: 'plugins::upload.assets.download',
   copyLink: 'plugins::upload.assets.copy-link',
 };
+
+const vodClient = new Core({
+  accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+  accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+  endpoint: `https://vod.${process.env.VOD_REGION}.aliyuncs.com`,
+  apiVersion: '2017-03-21',
+  timeout: +(process.env.OSS_TIMEOUT * 1000)
+});
 
 const fileModel = 'plugins::upload.file';
 
@@ -38,7 +47,7 @@ module.exports = {
 
     const query = pm.queryFrom(ctx.query);
     const files = await strapi.plugins.upload.services.upload[method](query);
-    console.log("files:", files)
+
     ctx.body = pm.sanitize(files, { withPrivate: false });
   },
 
@@ -93,6 +102,36 @@ module.exports = {
     await strapi.plugins['upload'].services.upload.remove(file);
 
     ctx.body = pm.sanitize(file, { action: ACTIONS.read, withPrivate: false });
+  },
+
+  async getPlayInfo(ctx) {
+    const {
+      state: { userAbility },
+      params: { id },
+    } = ctx;
+
+    const { file } = await findEntityAndCheckPermissions(
+      userAbility,
+      ACTIONS.read,
+      fileModel,
+      id
+    );
+
+    var params = {
+      "RegionId": process.env.VOD_REGION,
+      "VideoId": file.videoId,
+      "Definition": "LD"
+    }
+    var requestOption = {
+      method: 'POST'
+    };
+    try {
+      const result = await vodClient.request('GetPlayInfo', params, requestOption)
+      ctx.body = result.PlayInfoList.PlayInfo.PlayURL
+    } catch(err) {
+      console.log(err)
+      ctx.throw(err)
+    }
   },
 
   async updateSettings(ctx) {

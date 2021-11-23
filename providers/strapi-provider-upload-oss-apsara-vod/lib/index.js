@@ -171,10 +171,12 @@ module.exports = {
             const requestOption = {
               method: 'POST'
             };
+            let videoId = ""
             log("Invoking CreateUploadVideo")
             vodClient.request('CreateUploadVideo', params, requestOption)
             .then(
               result => {
+                videoId = result.VideoId
                 // Parse base64-encoded values
                 let buff = Buffer.from(result.UploadAddress, 'base64');
                 const uploadAddress = JSON.parse(buff.toString())
@@ -228,6 +230,7 @@ module.exports = {
                   } else {
                     file.url = result.url;
                   }
+                  file.videoId = videoId
                   resolve();
                 })
                 .catch((err) => {
@@ -265,11 +268,30 @@ module.exports = {
       },
       delete: (file) => {
         return new Promise((resolve, reject) => {
-          // delete file on OSS bucket
-          const path = config.uploadPath ? `${config.uploadPath}/` : '';
-          const fullPath = `${path}${file.hash}${file.ext}`;
-
-          ossImageClient.delete(fullPath)
+          if (file.ext === ".mp4") {
+            // Delete from ApsaraVideo VOD
+            /*
+            var params = {
+              "RegionId": config.vodRegion,
+              "VideoId": file.videoId
+            }
+            var requestOption = {
+              method: 'POST'
+            };
+            vodClient.request('DeleteVideo', params, requestOption).then((result) => {
+              resolve()
+            }, (ex) => {
+              console.log(ex);
+              reject()
+            })
+            */
+            console.log("Delete video!", file.hash + file.ext)
+            resolve()
+          } else {
+            // delete file on OSS bucket
+            const path = config.uploadPath ? `${config.uploadPath}/` : '';
+            const fullPath = `${path}${file.hash}${file.ext}`;
+            ossImageClient.delete(fullPath)
             .then((resp) => {
               log(resp);
               if (resp.res && /2[0-9]{2}/.test(resp.res.statusCode)) {
@@ -287,6 +309,7 @@ module.exports = {
             .catch((err) => {
               reject(err);
             })
+          }
         });
       }
     };

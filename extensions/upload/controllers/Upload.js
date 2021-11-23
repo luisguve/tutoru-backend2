@@ -36,6 +36,7 @@ module.exports = {
   destroy: resolveControllerMethod('destroy'),
   updateSettings: resolveControllerMethod('updateSettings'),
   getSettings: resolveControllerMethod('getSettings'),
+  getPlayInfo: resolveControllerMethod('getPlayInfo'),
 
   async upload(ctx) {
     const isUploadDisabled = _.get(strapi.plugins, 'upload.config.enabled', true) === false;
