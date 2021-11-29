@@ -22,9 +22,9 @@
       "required": false
     },
     "curso": {
+      "via": "clases",
       "plugin": "masterclass",
-      "model": "course",
-      "via": "clases"
+      "model": "course"
     },
     "duracion": {
       "type": "biginteger"

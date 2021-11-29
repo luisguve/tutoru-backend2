@@ -13,38 +13,35 @@
   },
   "attributes": {
     "duracion": {
-      "type": "decimal",
-      "configurable": false,
+      "type": "integer",
       "private": false
     },
-    "rating": {
-      "configurable": false,
-      "type": "decimal"
-    },
     "comentarios_publicos": {
-      "configurable": false,
       "plugin": "masterclass",
       "collection": "comentario",
       "via": "curso"
     },
     "preguntas": {
-      "configurable": false,
       "plugin": "masterclass",
       "collection": "comentario",
       "via": "curso"
     },
     "ventas": {
-      "configurable": false,
       "plugin": "masterclass",
       "collection": "venta",
       "via": "cursos"
     },
     "titulo": {
-      "configurable": false,
       "type": "string"
     },
+    "descripcion": {
+      "type": "text"
+    },
+    "precio": {
+      "type": "decimal",
+      "private": false
+    },
     "thumbnail": {
-      "configurable": false,
       "model": "file",
       "via": "related",
       "allowedTypes": [
@@ -53,24 +50,38 @@
       "plugin": "upload",
       "required": true
     },
-    "descripcion": {
-      "configurable": false,
-      "type": "text"
-    },
-    "precio": {
-      "configurable": false,
-      "type": "decimal",
-      "private": false
-    },
     "clases": {
-      "via": "curso",
       "plugin": "masterclass",
-      "collection": "clase"
+      "collection": "clase",
+      "via": "curso"
     },
-    "usuarios": {
+    "estudiantes": {
+      "plugin": "masterclass",
+      "collection": "usuario-curso",
+      "via": "curso"
+    },
+    "videos": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "categoria": {
+      "model": "categoria",
+      "via": "cursos"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": false
+    },
+    "reviews_curso": {
       "via": "curso",
       "plugin": "masterclass",
-      "collection": "usuario-curso"
+      "model": "reviews"
     }
   }
 }

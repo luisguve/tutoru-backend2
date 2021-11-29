@@ -24,6 +24,10 @@
       "type": "string",
       "configurable": false
     },
+    "seconds": {
+      "type": "integer",
+      "configurable": false
+    },
     "width": {
       "type": "integer",
       "configurable": false

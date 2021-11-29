@@ -117,21 +117,16 @@ module.exports = {
       id
     );
 
-    var params = {
+    const params = {
       "RegionId": process.env.VOD_REGION,
       "VideoId": file.videoId,
       "Definition": "LD"
     }
-    var requestOption = {
+    const requestOption = {
       method: 'POST'
     };
-    try {
-      const result = await vodClient.request('GetPlayInfo', params, requestOption)
-      ctx.body = result.PlayInfoList.PlayInfo.PlayURL
-    } catch(err) {
-      console.log(err)
-      ctx.throw(err)
-    }
+    const result = await vodClient.request('GetPlayInfo', params, requestOption)
+    ctx.body = { PlayURL: result.PlayInfoList.PlayInfo[0].PlayURL }
   },
 
   async updateSettings(ctx) {

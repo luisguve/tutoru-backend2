@@ -23,11 +23,11 @@ module.exports = async (ctx, next) => {
       
     } catch (err) {
       /** With Magic Changes */
-        try{
+        /*try{
           await strapi.plugins['magic'].services['magic'].loginWithMagic(ctx)
       } catch (err) {
           return handleErrors(ctx, err, 'unauthorized');
-      }
+      }*/
       /** END With Magic Changes */
     }
 

@@ -16,7 +16,6 @@ import Wrapper from '../CardWrapper';
 
 const Card = ({
   id,
-  videoId,
   isDisabled,
   checked,
   children,
@@ -61,7 +60,7 @@ const Card = ({
           hasError={hasError}
           previewUrl={previewUrl}
           url={url}
-          videoId={videoId}
+          id={id}
           type={fileType}
           withFileCaching={withFileCaching}
         />

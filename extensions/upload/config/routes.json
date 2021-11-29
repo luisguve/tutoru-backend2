@@ -96,7 +96,7 @@
     },
     {
       "method": "GET",
-      "path": "/get-play-info/:videoId",
+      "path": "/get-play-info/:id",
       "handler": "Upload.getPlayInfo",
       "config": {
         "policies": []

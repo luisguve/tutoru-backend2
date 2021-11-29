@@ -9,7 +9,7 @@ import VideoPreview from '../VideoPreview';
 import Wrapper from './Wrapper';
 import Image from './Image';
 
-const CardPreview = ({ extension, hasError, hasIcon, url, videoId, previewUrl, type, withFileCaching }) => {
+const CardPreview = ({ extension, hasError, hasIcon, url, id, previewUrl, type, withFileCaching }) => {
   const isFile = getType(type) === 'file';
   const isVideo = getType(type) === 'video';
   const cacheRef = useRef(performance.now());
@@ -33,7 +33,7 @@ const CardPreview = ({ extension, hasError, hasIcon, url, videoId, previewUrl, t
   return (
     <Wrapper>
       {isVideo ? (
-        <VideoPreview videoId={videoId} previewUrl={previewUrl} hasIcon={hasIcon} />
+        <VideoPreview id={id} previewUrl={previewUrl} hasIcon={hasIcon} />
       ) : (
         // Adding performance.now forces the browser no to cache the img
         // https://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images

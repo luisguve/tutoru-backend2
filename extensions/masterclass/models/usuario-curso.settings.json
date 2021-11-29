@@ -21,9 +21,9 @@
       "via": "cursos"
     },
     "curso": {
+      "via": "estudiantes",
       "plugin": "masterclass",
-      "model": "course",
-      "via": "usuarios"
+      "model": "course"
     }
   }
 }

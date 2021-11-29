@@ -311,7 +311,7 @@ const EditForm = forwardRef(
                       ) : (
                         <>
                           {isVideo ? (
-                            <VideoPlayer src={src} />
+                            <VideoPlayer id={fileToEdit.id} />
                           ) : (
                             <CardPreview type={mimeType} url={src} />
                           )}

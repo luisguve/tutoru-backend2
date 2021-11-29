@@ -1,13 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { request } from "strapi-helper-plugin"
 
 import PlayIcon from '../PlayIcon';
 import Duration from '../Duration';
+import { getRequestUrl } from '../../utils';
 import Wrapper from './Wrapper';
 
-const VideoPlayer = ({ src }) => {
+const VideoPlayer = ({ id }) => {
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [src, setSrc] = useState(null)
 
   const videoRef = useRef();
 
@@ -20,6 +23,19 @@ const VideoPlayer = ({ src }) => {
       videoRef.current.play();
     }
   };
+
+  const getPlayInfo = async () => {
+    const requestURL = getRequestUrl(`get-play-info/${id}`)
+    try {
+      const res = await request(requestURL, { method: 'GET' });
+      setSrc(res.PlayURL)
+    } catch(err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getPlayInfo()
+  }, [])
 
   return (
     <Wrapper onClick={togglePlay}>
@@ -47,11 +63,11 @@ const VideoPlayer = ({ src }) => {
 };
 
 VideoPlayer.defaultProps = {
-  src: null,
+  id: 1,
 };
 
 VideoPlayer.propTypes = {
-  src: PropTypes.string,
+  id: PropTypes.number,
 };
 
 export default VideoPlayer;
