@@ -25,12 +25,16 @@
       "type": "string"
     },
     "user": {
-      "via": "orders",
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "orders"
     },
     "ejercicios": {
       "collection": "ejercicio"
+    },
+    "cursos": {
+      "plugin": "masterclass",
+      "collection": "course"
     }
   }
 }

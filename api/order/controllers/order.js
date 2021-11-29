@@ -64,47 +64,68 @@ module.exports = {
 
 
     async create(ctx) {
-        const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000' //So we can redirect back
+        // Obtener el origen de la peticion para redireccionar luego del checkout
+        const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000' //
     
-        const { ejercicios } = ctx.request.body
-        if(!ejercicios || !ejercicios.length){
-            return ctx.throw(400, "Especificar un ejercicio")
+        const { ejercicios, cursos } = ctx.request.body
+        if(
+            (!ejercicios || !ejercicios.length) &&
+            (!cursos || !cursos.length)
+        ){
+            return ctx.throw(400, "Especificar al menos un artículo")
         }
 
-        const ejerciciosIds = [];
+        const ejerciciosIds = []
+        const cursosIds = []
 
-        //Retrieve the real product here
-        const realEjercicios = []
+        const articulos = []
+        // Obtener los ejercicios de la base de datos
         for (var i = 0; i < ejercicios.length; i++) {
-            const e = ejercicios[i]
-            const realEjercicio = await strapi.services.ejercicio.findOne({id: e.id})
-            if (!realEjercicio) {
-                return ctx.throw(404, `Ejercicio ${e.id} no encontrado`)
+            const id = ejercicios[i]
+            const ejercicio = await strapi.services.ejercicio.findOne({id})
+            if (!ejercicio) {
+                return ctx.throw(404, `Ejercicio ${id} no encontrado`)
             }
-            if (!realEjercicio.categoria.Titulo_normal) {
+            if (!ejercicio.categoria.Titulo_normal) {
                 // El ejercicio no tiene la categoria completa. Se requiere del titulo.
                 const query = {id: categoria}
-                realEjercicio.categoria = await strapi.services.categoria.findOne(query)
+                ejercicio.categoria = await strapi.services.categoria.findOne(query)
             }
-            realEjercicios.push(realEjercicio)
-            ejerciciosIds.push(realEjercicio.id)
+            articulos.push({
+                precio: ejercicio.precio,
+                label: `${ejercicio.categoria.Titulo_normal} - ${ejercicio.titulo}`
+            })
+            ejerciciosIds.push(id)
+        }
+        // Obtener los cursos de la base de datos
+        for (var i = 0; i < cursos.length; i++) {
+            const id = cursos[i]
+            const curso = await strapi.query("curso", "masterclass").findOne({id})
+            if (!curso) {
+                return ctx.throw(404, `Curso ${id} no encontrado`)
+            }
+            articulos.push({
+                precio: curso.precio,
+                label: `${curso.titulo}`
+            })
+            cursosIds.push(id)
         }
 
-        const {user} = ctx.state //From Magic Plugin
+        const { user } = ctx.state
 
         let total = 0;
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
-            line_items: realEjercicios.map(e => {
-                total += e.precio;
+            line_items: articulos.map(art => {
+                total += art.precio;
                 return {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: `${e.categoria.Titulo_normal} - ${e.titulo}`
+                            name: art.label
                         },
-                        unit_amount: fromDecimalToInt(e.precio),
+                        unit_amount: fromDecimalToInt(art.precio),
                     },
                     quantity: 1,
                 };
@@ -121,6 +142,7 @@ module.exports = {
             estado: "no_completada",
             total,
             ejercicios: ejerciciosIds,
+            cursos: cursosIds,
             checkout_session: session.id
         })
 
@@ -131,7 +153,8 @@ module.exports = {
         const session = await stripe.checkout.sessions.retrieve(
             checkout_session
         )
-        const { user: { id } } = ctx.state
+        const { user } = ctx.state
+        const { id } = user
 
         const order = await strapi.services.order.findOne({
             checkout_session
@@ -153,33 +176,44 @@ module.exports = {
                 estado: "completada"
             })
 
-            // Enlaza los ejercicios con su solucion al usuario.
-
-            // Obtener los ejercicios que ha adquirido este usuario.
-            const anteriores = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id })
-
-            // Si este usuario no tiene ejercicios, se crea un nuevo registro.
-            if (!anteriores) {
-                await strapi.services["usuarios-ejercicios"].create({
-                    user_id: id,
-                    ejercicios: nuevos.ejercicios.map(e => e.id)
-                })
-            } else {
-                // Si ya tiene ejercicios comprados, se le agrean los nuevos.
-                await strapi.services["usuarios-ejercicios"].update({
+            // Asigna los articulos comprados al usuario si esta orden incluye ejercicios.
+            if (nuevos.ejercicios.length) {
+                // Obtener los ejercicios que ha adquirido este usuario.
+                const anteriores = await strapi.services["usuarios-ejercicios"].findOne({
                     user_id: id
-                },
-                {
-                    ejercicios: [
-                        ...anteriores.ejercicios.map(e => e.id),
-                        ...nuevos.ejercicios.map(e => e.id)
-                    ]
+                })
+                // Si este usuario no tiene ejercicios, se crea un nuevo registro.
+                if (!anteriores) {
+                    await strapi.services["usuarios-ejercicios"].create({
+                        user_id: id,
+                        ejercicios: nuevos.ejercicios.map(e => e.id)
+                    })
+                } else {
+                    // Si ya tiene ejercicios comprados, se le agregan los nuevos.
+                    await strapi.services["usuarios-ejercicios"].update({
+                        user_id: id
+                    },
+                    {
+                        ejercicios: [
+                            ...anteriores.ejercicios.map(e => e.id),
+                            ...nuevos.ejercicios.map(e => e.id)
+                        ]
+                    })
+                }
+            }
+            // Asigna los cursos comprados al usuario si esta compra incluye cursos.
+            for (var i = 0; i < nuevos.cursos.length; i++) {
+                const c = nuevos.cursos[i]
+                await strapi.query("usuario_curso", "masterclass").create({
+                    usuario: id,
+                    curso: c
                 })
             }
 
             const result = sanitizeEntity(nuevos, { model: strapi.models.order })
-            // Elimina información privada
+            // Retornar solo informacion esencial
             delete result.ejercicios
+            delete result.cursos
             delete result.user
 
             return result
