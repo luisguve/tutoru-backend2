@@ -90,7 +90,7 @@ module.exports = {
     const { user: { id } } = ctx.state
 
     const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id })
-    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return null
+    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return []
 
     return await Promise.all(usuario.ejercicios.map(async entity => {
       const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
