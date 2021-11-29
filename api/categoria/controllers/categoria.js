@@ -92,7 +92,10 @@ module.exports = {
       }
       // Construye el arbol de categorias como un array, comenzando por la
       // categoria raiz.
-      let categoriaActual = ejercicio.categoria;
+      let categoriaActual = await strapi.services.categoria.findOne({
+        id: ejercicio.categoria.id || ejercicio.categoria
+      });
+      ejercicio.categoria = categoriaActual
       const arbol = [categoriaActual.Titulo_url];
       while (categoriaActual.padre) {
         categoriaActual = await strapi.services.categoria.findOne({
@@ -118,6 +121,7 @@ module.exports = {
     }
     return {
       muestras,
+      cursos: categoria.cursos,
       q,
     };
   }
