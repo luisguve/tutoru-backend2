@@ -26,8 +26,8 @@
       "required": false
     },
     "ejercicios": {
-      "via": "categoria",
-      "collection": "ejercicio"
+      "collection": "ejercicio",
+      "via": "categoria"
     },
     "Titulo_normal": {
       "type": "string"
@@ -44,9 +44,14 @@
       "type": "string"
     },
     "muestras": {
-      "via": "categorias_muestra",
       "collection": "ejercicio",
+      "via": "categorias_muestra",
       "dominant": true
+    },
+    "cursos": {
+      "via": "categoria",
+      "plugin": "masterclass",
+      "collection": "course"
     }
   }
 }
