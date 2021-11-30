@@ -67,13 +67,12 @@
       "type": "text"
     },
     "categoria": {
-      "model": "categoria",
-      "via": "ejercicios"
+      "via": "ejercicios",
+      "model": "categoria"
     },
     "categorias_muestra": {
-      "private": true,
-      "collection": "categoria",
-      "via": "muestras"
+      "via": "muestras",
+      "collection": "categoria"
     }
   }
 }
