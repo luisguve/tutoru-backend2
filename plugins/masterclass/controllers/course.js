@@ -5,4 +5,10 @@
  * to customize this controller
  */
 
-module.exports = {};
+module.exports = {
+  async findOne(ctx) {
+    const { slug } = ctx.params
+    const curso = await strapi.query("course", "masterclass").findOne({ slug })
+    return curso
+  }
+};
