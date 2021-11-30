@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "name": "reviews",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true,
+    "increments": true,
+    "comment": ""
+  },
+  "attributes": {
+    "curso": {
+      "plugin": "masterclass",
+      "model": "course",
+      "via": "reviews_curso"
+    },
+    "rating": {
+      "type": "decimal"
+    },
+    "contenidos": {
+      "via": "review",
+      "plugin": "masterclass",
+      "collection": "review-content"
+    }
+  }
+}

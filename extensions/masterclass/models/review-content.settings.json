@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "review_contents",
+  "info": {
+    "name": "review_content",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true,
+    "increments": true,
+    "comment": ""
+  },
+  "attributes": {
+    "review": {
+      "plugin": "masterclass",
+      "model": "reviews",
+      "via": "contenidos"
+    },
+    "usuario": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "comentario": {
+      "type": "text"
+    },
+    "calificacion": {
+      "type": "integer"
+    }
+  }
+}

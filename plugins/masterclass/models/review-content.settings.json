@@ -1,0 +1,14 @@
+{
+  "kind": "collectionType",
+  "collectionName": "review_contents",
+  "info": {
+    "name": "review_content"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true,
+    "increments": true,
+    "comment": ""
+  },
+  "attributes": {}
+}
