@@ -231,6 +231,13 @@ module.exports = {
                     file.url = result.url;
                   }
                   file.videoId = videoId
+                  // Extract duration in seconds from video
+                  const header = Buffer.from("mvhd");
+                  const start = fileBuffer.indexOf(header) + 17;
+                  const timeScale = fileBuffer.readUInt32BE(start, 4);
+                  const duration = fileBuffer.readUInt32BE(start + 4, 4);
+                  const audioLength = Math.floor(duration/timeScale * 1000) / 1000;
+                  file.seconds = parseFloat(audioLength.toFixed(0))
                   resolve();
                 })
                 .catch((err) => {
@@ -270,23 +277,22 @@ module.exports = {
         return new Promise((resolve, reject) => {
           if (file.ext === ".mp4") {
             // Delete from ApsaraVideo VOD
-            /*
             var params = {
               "RegionId": config.vodRegion,
-              "VideoId": file.videoId
+              "VideoIds": file.videoId
             }
+            log("deleting", params)
             var requestOption = {
               method: 'POST'
             };
-            vodClient.request('DeleteVideo', params, requestOption).then((result) => {
-              resolve()
-            }, (ex) => {
-              console.log(ex);
-              reject()
-            })
-            */
-            console.log("Delete video!", file.hash + file.ext)
-            resolve()
+            vodClient.request('DeleteVideo', params, requestOption)
+            .then(
+              result => resolve(),
+              ex => {
+                console.log(ex);
+                reject(new Error('Video file on deletion error'))
+              }
+            )
           } else {
             // delete file on OSS bucket
             const path = config.uploadPath ? `${config.uploadPath}/` : '';
