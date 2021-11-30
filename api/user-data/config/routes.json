@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/user-data/comprados",
+      "handler": "user-data.articulosComprados",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user-data/comprados-ids",
+      "handler": "user-data.compradosIds",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
