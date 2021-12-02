@@ -22,9 +22,9 @@
       "via": "curso"
     },
     "preguntas": {
+      "via": "curso",
       "plugin": "masterclass",
-      "collection": "comentario",
-      "via": "curso"
+      "collection": "comentario"
     },
     "ventas": {
       "plugin": "masterclass",

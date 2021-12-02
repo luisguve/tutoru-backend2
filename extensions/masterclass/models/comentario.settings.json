@@ -16,14 +16,18 @@
       "type": "text"
     },
     "curso": {
-      "via": "preguntas",
       "plugin": "masterclass",
-      "model": "course"
+      "model": "course",
+      "via": "preguntas"
     },
     "respuestas": {
       "plugin": "masterclass",
       "collection": "respuesta",
       "via": "comentario"
+    },
+    "autor": {
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }
