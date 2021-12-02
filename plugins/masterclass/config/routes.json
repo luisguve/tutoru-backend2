@@ -15,6 +15,30 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "GET",
+      "path": "/usuario-curso/:id",
+      "handler": "usuario-curso.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/curso/:id/review",
+      "handler": "comentario.postReview",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/curso/:id/pregunta",
+      "handler": "comentario.postPregunta",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
