@@ -24,6 +24,7 @@ module.exports = {
         id: c.id,
         duracion: c.duracion,
         titulo: c.titulo,
+        clases: c.videos.length,
         descripcion: c.descripcion,
         slug: c.slug,
         thumbnail: {
@@ -78,10 +79,23 @@ module.exports = {
   async compradosIds(ctx) {
     const { user: { id } } = ctx.state
 
-    const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id });
-    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) return []
+    const usuarioCompleto = await strapi.query("user", "users-permissions").findOne({id})
+    const cursos = usuarioCompleto.cursos.map(c => c.id)
 
-    return usuario.ejercicios.map(e => e.id)
+    const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id });
+    if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) {
+      return {
+        ejercicios: [],
+        cursos
+      }
+    }
+
+    const ejercicios = usuario.ejercicios.map(e => e.id)
+
+    return {
+      ejercicios,
+      cursos
+    }
   },
   /**
   * Construye el arbol de categorias como un array, comenzando por la categoria raiz.
