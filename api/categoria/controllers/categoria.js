@@ -119,9 +119,14 @@ module.exports = {
         return subcategoria
       })
     }
+    const sanitizedCursos = categoria.cursos.map(c => {
+      c.videos = c.videos.length
+      delete c.reviews_curso
+      return c
+    })
     return {
       muestras,
-      cursos: categoria.cursos,
+      cursos: sanitizedCursos,
       q,
     };
   }
