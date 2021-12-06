@@ -21,9 +21,12 @@
       "via": "cursos"
     },
     "curso": {
-      "via": "estudiantes",
       "plugin": "masterclass",
-      "model": "course"
+      "model": "course",
+      "via": "estudiantes"
+    },
+    "clase_actual": {
+      "type": "json"
     }
   }
 }

@@ -56,9 +56,9 @@
       "via": "curso"
     },
     "estudiantes": {
+      "via": "curso",
       "plugin": "masterclass",
-      "collection": "usuario-curso",
-      "via": "curso"
+      "collection": "usuario-curso"
     },
     "videos": {
       "collection": "file",
