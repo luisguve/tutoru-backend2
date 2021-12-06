@@ -18,8 +18,40 @@
     },
     {
       "method": "GET",
+      "path": "/usuario-curso/data-rep-video",
+      "handler": "usuario-curso.dataRepVideo",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/usuario-curso/marcar-visto",
+      "handler": "usuario-curso.marcarVisto",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/usuario-curso/:id",
       "handler": "usuario-curso.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuario-curso/:id/data-rep",
+      "handler": "usuario-curso.dataRep",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuario-curso/:id/clases-completadas",
+      "handler": "usuario-curso.clasesCompletadas",
       "config": {
         "policies": []
       }
