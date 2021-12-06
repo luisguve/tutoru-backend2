@@ -42,12 +42,27 @@ module.exports = {
     const curso = await strapi.query("course", "masterclass").findOne({
       id
     })
+    const preguntas = await Promise.all(curso.preguntas.map(async p => {
+      const pregunta = await strapi.query("comentario", "masterclass").findOne({
+        id: p.id
+      })
+      if (!pregunta) {
+        return {}
+      }
+      return {
+        id: p.id,
+        contenido: pregunta.contenido,
+        autor: pregunta.autor.id,
+        respuestas: pregunta.respuestas
+      }
+    }))
+
     return {
       clasesCompletadas,
       estudiantes: curso.estudiantes.length,
       reviews: reviews ? reviews.contenidos : null,
       rating: reviews ? reviews.rating : 0,
-      preguntas: curso.preguntas
+      preguntas
     }
   },
   /*
