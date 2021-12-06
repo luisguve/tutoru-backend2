@@ -9,6 +9,9 @@ module.exports = {
   async findOne(ctx) {
     const { slug } = ctx.params
     const curso = await strapi.query("course", "masterclass").findOne({ slug })
+    if (!curso) {
+      return ctx.throw(404)
+    }
     return {
       id: curso.id,
       duracion: curso.duracion,
