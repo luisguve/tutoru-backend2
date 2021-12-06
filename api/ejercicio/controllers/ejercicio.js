@@ -24,12 +24,8 @@ module.exports = {
 
     return await Promise.all(entities.map(async entity => {
       const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
-      if (ejercicio.solucion) {
-        delete ejercicio.solucion;
-      }
-      if (ejercicio.solucion_pdf) {
-        delete ejercicio.solucion_pdf;
-      }
+      delete ejercicio.solucion
+      delete ejercicio.solucion_pdf
       // Construye el arbol de categorias como un array, comenzando por la
       // categoria raiz.
       let categoriaActual = ejercicio.categoria;
@@ -40,6 +36,8 @@ module.exports = {
         });
         arbol.unshift(categoriaActual.Titulo_url);
       }
+      delete ejercicio.categoria
+      delete ejercicio.categorias_muestra
       // Anexa el arbol de categorias al ejercicio
       ejercicio.arbolCategorias = arbol;
 
@@ -61,12 +59,8 @@ module.exports = {
       "categoria.Titulo_url": categoria
     });
     const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
-    if (ejercicio && ejercicio.solucion) {
-      delete ejercicio.solucion;
-    }
-    if (ejercicio && ejercicio.solucion_pdf) {
-      delete ejercicio.solucion_pdf;
-    }
+    delete ejercicio.solucion
+    delete ejercicio.solucion_pdf
 
     // Construye el arbol de categorias como un array, comenzando por la
     // categoria raiz.
@@ -78,6 +72,8 @@ module.exports = {
       });
       arbol.unshift(categoriaActual.Titulo_url);
     }
+    delete ejercicio.categoria
+    delete ejercicio.categorias_muestra
     // Anexa el arbol de categorias al ejercicio
     ejercicio.arbolCategorias = arbol;
 
