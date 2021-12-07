@@ -150,9 +150,14 @@ module.exports = {
     },
     async confirm(ctx) {
         const { checkout_session } = ctx.request.body
-        const session = await stripe.checkout.sessions.retrieve(
-            checkout_session
-        )
+        let session
+        try {
+            session = await stripe.checkout.sessions.retrieve(
+                checkout_session
+            )
+        } catch(err) {
+            return ctx.throw(404, "Confirmante erróneo")
+        }
         const { user } = ctx.state
         const { id } = user
 
@@ -168,45 +173,50 @@ module.exports = {
         }
 
         if(session.payment_status === "paid"){
-            // Update order
-            const nuevos = await strapi.services.order.update({
+            // Crear nuevos registros solo si la orden no ha sido marcada como completada
+            const nuevos = await strapi.services.order.findOne({
                 checkout_session
-            },
-            {
-                estado: "completada"
             })
-
-            // Asigna los articulos comprados al usuario si esta orden incluye ejercicios.
-            if (nuevos.ejercicios.length) {
-                // Obtener los ejercicios que ha adquirido este usuario.
-                const anteriores = await strapi.services["usuarios-ejercicios"].findOne({
-                    user_id: id
-                })
-                // Si este usuario no tiene ejercicios, se crea un nuevo registro.
-                if (!anteriores) {
-                    await strapi.services["usuarios-ejercicios"].create({
-                        user_id: id,
-                        ejercicios: nuevos.ejercicios.map(e => e.id)
-                    })
-                } else {
-                    // Si ya tiene ejercicios comprados, se le agregan los nuevos.
-                    await strapi.services["usuarios-ejercicios"].update({
+            if (nuevos.estado !== "completada") {
+                // Asigna los articulos comprados al usuario si esta orden incluye ejercicios.
+                if (nuevos.ejercicios.length) {
+                    // Obtener los ejercicios que ha adquirido este usuario.
+                    const anteriores = await strapi.services["usuarios-ejercicios"].findOne({
                         user_id: id
-                    },
-                    {
-                        ejercicios: [
-                            ...anteriores.ejercicios.map(e => e.id),
-                            ...nuevos.ejercicios.map(e => e.id)
-                        ]
+                    })
+                    // Si este usuario no tiene ejercicios, se crea un nuevo registro.
+                    if (!anteriores) {
+                        await strapi.services["usuarios-ejercicios"].create({
+                            user_id: id,
+                            ejercicios: nuevos.ejercicios.map(e => e.id)
+                        })
+                    } else {
+                        // Si ya tiene ejercicios comprados, se le agregan los nuevos.
+                        await strapi.services["usuarios-ejercicios"].update({
+                            user_id: id
+                        },
+                        {
+                            ejercicios: [
+                                ...anteriores.ejercicios.map(e => e.id),
+                                ...nuevos.ejercicios.map(e => e.id)
+                            ]
+                        })
+                    }
+                }
+                // Asigna los cursos comprados al usuario si esta compra incluye cursos.
+                for (var i = 0; i < nuevos.cursos.length; i++) {
+                    const c = nuevos.cursos[i]
+                    await strapi.query("usuario-curso", "masterclass").create({
+                        usuario: id,
+                        curso: c
                     })
                 }
-            }
-            // Asigna los cursos comprados al usuario si esta compra incluye cursos.
-            for (var i = 0; i < nuevos.cursos.length; i++) {
-                const c = nuevos.cursos[i]
-                await strapi.query("usuario-curso", "masterclass").create({
-                    usuario: id,
-                    curso: c
+                // Marcar orden como completada 
+                await strapi.services.order.update({
+                    checkout_session
+                },
+                {
+                    estado: "completada"
                 })
             }
 
@@ -218,7 +228,7 @@ module.exports = {
 
             return result
         } else {
-            ctx.throw(400, "It seems like the order wasn't verified, please contact support")
+            ctx.throw(400, "Orden no verificada")
         }
     }
 };
