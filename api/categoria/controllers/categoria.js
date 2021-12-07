@@ -95,7 +95,11 @@ module.exports = {
       let categoriaActual = await strapi.services.categoria.findOne({
         id: ejercicio.categoria.id || ejercicio.categoria
       });
-      delete ejercicio.categoria
+      // El ejercicio tiene la categoria completa.
+      // Asigna el titulo de la categoria en lugar de la categoria completa.
+      ejercicio.categoria = {
+        Titulo_normal: categoriaActual.Titulo_normal
+      }
       const arbol = [categoriaActual.Titulo_url];
       while (categoriaActual.padre) {
         categoriaActual = await strapi.services.categoria.findOne({

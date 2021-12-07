@@ -36,7 +36,11 @@ module.exports = {
         });
         arbol.unshift(categoriaActual.Titulo_url);
       }
-      delete ejercicio.categoria
+      // El ejercicio tiene la categoria completa.
+      // Asigna el titulo de la categoria en lugar de la categoria completa.
+      ejercicio.categoria = {
+        Titulo_normal: ejercicio.categoria.Titulo_normal
+      }
       delete ejercicio.categorias_muestra
       // Anexa el arbol de categorias al ejercicio
       ejercicio.arbolCategorias = arbol;
@@ -72,7 +76,11 @@ module.exports = {
       });
       arbol.unshift(categoriaActual.Titulo_url);
     }
-    delete ejercicio.categoria
+    // El ejercicio tiene la categoria completa.
+    // Asigna el titulo de la categoria en lugar de la categoria completa.
+    ejercicio.categoria = {
+      Titulo_normal: ejercicio.categoria.Titulo_normal
+    }
     delete ejercicio.categorias_muestra
     // Anexa el arbol de categorias al ejercicio
     ejercicio.arbolCategorias = arbol;
@@ -90,12 +98,8 @@ module.exports = {
 
     return await Promise.all(usuario.ejercicios.map(async entity => {
       const ejercicio = sanitizeEntity(entity, { model: strapi.models.ejercicio });
-      if (ejercicio.solucion) {
-        delete ejercicio.solucion;
-      }
-      if (ejercicio.solucion_pdf) {
-        delete ejercicio.solucion_pdf;
-      }
+      delete ejercicio.solucion
+      delete ejercicio.solucion_pdf
       // Antes de construir  el arbol de categorias, reasigna la categoria completa
       // ya que solo contiene su id.
       const categoria = await strapi.services.categoria.findOne({
