@@ -17,7 +17,7 @@ module.exports = {
 
     const usuarioCompleto = await strapi.query("user", "users-permissions").findOne({id})
     const cursos = await strapi.query("course", "masterclass").find({
-      id_in: usuarioCompleto.cursos.map(c => c.id)
+      id_in: usuarioCompleto.cursos.map(c => c.curso)
     })
     const sanitizedCursos = cursos.map(c => {
       return {
@@ -67,7 +67,7 @@ module.exports = {
       }
       return ejercicio;
     }));
-    
+
     return {
       ejercicios,
       cursos: sanitizedCursos
@@ -80,7 +80,7 @@ module.exports = {
     const { user: { id } } = ctx.state
 
     const usuarioCompleto = await strapi.query("user", "users-permissions").findOne({id})
-    const cursos = usuarioCompleto.cursos.map(c => c.id)
+    const cursos = usuarioCompleto.cursos.map(c => c.curso)
 
     const usuario = await strapi.services["usuarios-ejercicios"].findOne({ user_id: id });
     if (!usuario || !usuario.ejercicios || !usuario.ejercicios.length) {
