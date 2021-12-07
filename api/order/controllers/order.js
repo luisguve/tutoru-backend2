@@ -100,7 +100,7 @@ module.exports = {
         // Obtener los cursos de la base de datos
         for (var i = 0; i < cursos.length; i++) {
             const id = cursos[i]
-            const curso = await strapi.query("curso", "masterclass").findOne({id})
+            const curso = await strapi.query("course", "masterclass").findOne({id})
             if (!curso) {
                 return ctx.throw(404, `Curso ${id} no encontrado`)
             }
@@ -204,7 +204,7 @@ module.exports = {
             // Asigna los cursos comprados al usuario si esta compra incluye cursos.
             for (var i = 0; i < nuevos.cursos.length; i++) {
                 const c = nuevos.cursos[i]
-                await strapi.query("usuario_curso", "masterclass").create({
+                await strapi.query("usuario-curso", "masterclass").create({
                     usuario: id,
                     curso: c
                 })
