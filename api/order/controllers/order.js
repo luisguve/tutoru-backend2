@@ -211,7 +211,8 @@ module.exports = {
                         curso: c
                     })
                 }
-                // Marcar orden como completada 
+                // Marcar orden como completada
+                nuevos.estado = "completada"
                 await strapi.services.order.update({
                     checkout_session
                 },
